@@ -7,6 +7,7 @@ import {Circle as CircleStyle, Fill, Stroke, Style} from 'ol/style.js';
 import {OSM, Vector as VectorSource} from 'ol/source.js';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js';
 
+
 const view = new View({
   center: [0, 0],
   zoom: 2,
@@ -75,6 +76,9 @@ positionFeature.setStyle(
   }),
 );
 
+// Start the geolocation tracking
+geolocation.setTracking(true);
+
 function fetchLocationData() {
   fetch('http://localhost:3005/locations/65ded1920a2a2e2fd47bad30')
     .then(response => response.json())
@@ -90,6 +94,7 @@ fetchLocationData();
 
 // Then call the function every 10 seconds
 setInterval(fetchLocationData, 10000);
+
 
 new VectorLayer({
   map: map,
