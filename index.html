@@ -19,9 +19,6 @@
       // generate points features
 
       const vectorSource = new ol.source.Vector();
-
-
-
       let previousFeature = null;
 
       function fetchLocationData(callback) {
@@ -29,14 +26,16 @@
         .then(response => response.json())
         .then(data => {
           let locationData = [data.location.latitude, data.location.longitude];
-          // Transform the coordinates from EPSG:3857 to EPSG:4326
-          locationData = ol.proj.transform(locationData, 'EPSG:3857', 'EPSG:4326');
           console.log(locationData);
           if (locationData) {
+            if (previousFeature) {
+              vectorSource.removeFeature(previousFeature);
+            }
             const feature = new ol.Feature({
               geometry: new ol.geom.Point(locationData)
             });
             vectorSource.addFeature(feature);
+            previousFeature = feature;
             document.getElementById('locationDataBox').innerText = `Latitude: ${locationData[0]}, Longitude: ${locationData[1]}`;
           }
         })
@@ -66,8 +65,8 @@
           vectorLayer
         ],
         view: new ol.View({
-          center: ol.proj.fromLonLat([-75, 35]),
-          zoom: 2
+          center: ol.proj.fromLonLat([0,0]),
+          zoom: 3
         })
       });
     </script>
