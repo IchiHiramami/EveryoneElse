@@ -9,10 +9,11 @@
       }
     </style>
     <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.2.1/build/ol.js"></script>
-    <title>Points From Code</title>
+    <title>FindMyTranport</title>
   </head>
   <body>
-    <h2>Points From Code</h2>
+    <h2>See the Location of the Tranport Vehicle</h2>
+    <p>The red dot is the near real-time location of the vehicle and is updated every 10 seconds to keep the server running. Sorry for any inconvience. This product is <b>not final</b> and is still <b>under development</b>. We will continue to work to get things much more effeciently and scale up to meet user demands.</p>
     <div id="map" class="map"></div>
     <div id="locationDataBox"></div>
     <script type="text/javascript">
@@ -72,8 +73,8 @@
           vectorLayer
         ],
         view: new ol.View({
-          center: ol.proj.fromLonLat([0,0]),
-          zoom: 3
+          center: ol.proj.fromLonLat([121.078999, 14.640817]),
+          zoom: 18
         })
       });
     </script>
