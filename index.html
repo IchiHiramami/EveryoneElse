@@ -24,6 +24,7 @@
       let isFetching = false;
 
       function fetchLocationData(callback) {
+        console.log('here');
         if (isFetching) return;
         isFetching = true;
         fetch('https://tracktransport.azurewebsites.net/locations/65ded1920a2a2e2fd47bad30')
