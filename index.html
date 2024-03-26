@@ -3,81 +3,123 @@
   <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.2.1/css/ol.css" type="text/css">
     <style>
+      body {
+        background-color: #1b1b1b;
+        color: #ffffff;
+      }
       .map {
-        height: 400px;
+        height: 1080px;
         width: 100%;
+      }
+      b, strong {
+        color:rgb(38, 119, 190)
+      }
+      i, em {
+        color:aquamarine
+      }
+      u {
+        color:bisque
       }
     </style>
     <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.2.1/build/ol.js"></script>
     <title>FindMyTranport</title>
   </head>
   <body>
-    <h2>See the Location of the Tranport Vehicle</h2>
-    <p>The red dot is the near real-time location of the vehicle and is updated every 10 seconds to keep the server running. Sorry for any inconvience. This product is <b>not final</b> and is still <b>under development</b>. We will continue to work to get things much more effeciently and scale up to meet user demands.</p>
+    <h2><b>TRACK</b><i>my</i><u>Transport</u></h2>
+    <p>You can now see where the locations of public transport Are!</p>
     <div id="map" class="map"></div>
-    <div id="locationDataBox"></div>
+    <div id="for fun" style="color: #ffa31a;"></div>
     <script type="text/javascript">
       // generate points features
 
-      const vectorSource = new ol.source.Vector();
-      let previousFeature = null;
-      let isFetching = false;
+    const vectorSource = new ol.source.Vector();
+    let previousFeatures = {};
+    const urls = [
+      'http://localhost:3005/locations/65ded1920a2a2e2fd47bad30',
+      'http://localhost:3005/locations/660214d7556604590d3fb558',
+      'http://localhost:3005/locations/660214f2556604590d3fb55a',
+      'http://localhost:3005/locations/660214fc556604590d3fb55c',
+      'http://localhost:3005/locations/6602150f556604590d3fb55e',
+      'http://localhost:3005/locations/66021519556604590d3fb560'
+    ];
+    const colors = [
+      'rgb(255, 0, 0)',    // red
+      'rgb(0, 0, 255)',    // blue
+      'rgb(0, 128, 0)',    // green
+      'rgb(255, 255, 0)',  // yellow
+      'rgb(128, 0, 128)',  // purple
+      'rgb(255, 165, 0)'   // orange
+    ];
+    let completedFetches = 0;
 
-      function fetchLocationData(callback) {
-        console.log('here');
-        if (isFetching) return;
-        isFetching = true;
-        fetch('https://tracktransport.azurewebsites.net/locations/65ded1920a2a2e2fd47bad30')
-        .then(response => response.json())
-        .then(data => {
-          let locationData = [data.location.latitude, data.location.longitude];
-          console.log(locationData);
-          if (locationData) {
-            if (previousFeature) {
-              vectorSource.removeFeature(previousFeature);
-            }
-            const feature = new ol.Feature({
-              geometry: new ol.geom.Point(locationData)
-            });
-            vectorSource.addFeature(feature);
-            previousFeature = feature;
-            document.getElementById('locationDataBox').innerText = `Latitude: ${locationData[0]}, Longitude: ${locationData[1]}`;
-          }
-          isFetching = false;
-        })
-        .catch(error => {
-          console.error('Error:', error);
-          isFetching = false;
-        });
+    function fetchLocationData(url, color) {
+      let isFetching = false;
+      if (isFetching) return;
+      isFetching = true;
+      fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        let locationData = [data.location.latitude, data.location.longitude];
+        console.log(locationData);
+        if (locationData) {
+          const feature = new ol.Feature({
+            geometry: new ol.geom.Point(locationData)
+          });
+          feature.setStyle(
+            new ol.style.Style({
+              image: new ol.style.Circle({
+                radius: 2,
+                fill: new ol.style.Fill({color: color})
+              })
+            })
+          );
+          vectorSource.addFeature(feature);
+          previousFeatures[url] = feature;
+        }
+        isFetching = false;
+        completedFetches++;
+        if (completedFetches === urls.length) {
+          setTimeout(() => {
+            vectorSource.clear();
+            completedFetches = 0;
+          }, 2000);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        isFetching = false;
+      });
     }
 
-      fetchLocationData();
-      setInterval(fetchLocationData, 10000);
+    urls.forEach((url, index) => {
+      fetchLocationData(url, colors[index]);
+      setInterval(() => fetchLocationData(url, colors[index]), 4000);
+    });
 
-      // create the source and layer for random features
-      const vectorLayer = new ol.layer.Vector({
-        source: vectorSource,
-        style: new ol.style.Style({
-          image: new ol.style.Circle({
-            radius: 2,
-            fill: new ol.style.Fill({color: 'red'})
-          })
+    // create the source and layer for random features
+    const vectorLayer = new ol.layer.Vector({
+      source: vectorSource,
+      style: new ol.style.Style({
+        image: new ol.style.Circle({
+          radius: 2,
+          fill: new ol.style.Fill({color: 'red'})
         })
-      });
-      // create map and add layers
-      const map = new ol.Map({
-        target: 'map',
-        layers: [
-          new ol.layer.Tile({
-            source: new ol.source.OSM()
-          }),
-          vectorLayer
-        ],
-        view: new ol.View({
-          center: ol.proj.fromLonLat([121.078999, 14.640817]),
-          zoom: 18
-        })
-      });
+      })
+    });
+    // create map and add layers
+    const map = new ol.Map({
+      target: 'map',
+      layers: [
+        new ol.layer.Tile({
+          source: new ol.source.OSM()
+        }),
+        vectorLayer
+      ],
+      view: new ol.View({
+        center: ol.proj.fromLonLat([121.078999, 14.640817]),
+        zoom: 16
+      })
+    });
     </script>
   </body>
 </html>
