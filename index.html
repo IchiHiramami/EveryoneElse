@@ -3,29 +3,56 @@
   <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.2.1/css/ol.css" type="text/css">
     <style>
-      body {
-        background-color: #1b1b1b;
-        color: #ffffff;
-      }
-      .map {
-        height: 1080px;
-        width: 100%;
-      }
-      b, strong {
-        color:rgb(38, 119, 190)
-      }
-      i, em {
-        color:aquamarine
-      }
-      u {
-        color:bisque
-      }
+        p {
+          color: #ffffff;
+        }
+        b {
+            color: white
+        }
+        mark {
+            background-color: #003A6C;
+            color: #ffffff
+        }
+        h1 {
+            color: #ffffff;
+            text-align: center;
+            font: Neue-Helvetica
+        }
+        body {
+          background-color: #333333;
+          color: #003A6C;
+          margin: 0;
+          padding: 0;
+          font-family: Arial, sans-serif;
+        }
+        table {
+          width: 100%;
+          border-collapse: collapse;
+        }
+        th, td {
+          border: 1px solid #ffffff;
+          padding: 10px;
+          text-align: left;
+        }
+        th {
+          background-color: #003A6C;
+          color: rgb(252, 252, 252);
+        }
+        tr:nth-child(even) {
+          background-color: #d4d4d4;
+        }
+        .map {
+          height: 80vh; /* 3/5 of the viewport height */
+          width: 100%;
+          border: 10px solid #003A6C;
+        }
+
     </style>
     <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.2.1/build/ol.js"></script>
     <title>FindMyTranport</title>
   </head>
   <body>
-    <h2><b>TRACK</b><i>my</i><u>Transport</u></h2>
+    <h1>Track My Tranport Vehicle</h1>
     <p>You can now see where the locations of public transport Are!</p>
     <div id="map" class="map"></div>
     <div id="for fun" style="color: #ffa31a;"></div>
@@ -68,7 +95,7 @@
           feature.setStyle(
             new ol.style.Style({
               image: new ol.style.Circle({
-                radius: 2,
+                radius: 12,
                 fill: new ol.style.Fill({color: color})
               })
             })
@@ -101,7 +128,7 @@
       source: vectorSource,
       style: new ol.style.Style({
         image: new ol.style.Circle({
-          radius: 2,
+          radius: 12,
           fill: new ol.style.Fill({color: 'red'})
         })
       })
