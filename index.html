@@ -3,6 +3,9 @@
   <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.2.1/css/ol.css" type="text/css">
     <style>
+        a {
+          color: white
+        }
         p {
           color: #ffffff;
         }
@@ -46,6 +49,24 @@
           width: 100%;
           border: 10px solid #003A6C;
         }
+        #lineSelect, #startTrack, #stopTrack {
+          margin: 10px;
+          padding: 10px;
+          font-size: 1em;
+        }
+        #startTrack, #stopTrack {
+          background-color: #003A6C;
+          border: none;
+          color: white;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          transition-duration: 0.4s;
+          cursor: pointer;
+        }
+        #startTrack:hover, #stopTrack:hover {
+          background-color: #4c8dc5;
+        }
 
     </style>
     <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.2.1/build/ol.js"></script>
@@ -56,6 +77,7 @@
     <p>You can now see where the locations of public transport Are!</p>
     <div id="map" class="map"></div>
     <div id="for fun" style="color: #ffa31a;"></div>
+    <button id="startTrack"><a href="https://docs.google.com/forms/d/e/1FAIpQLScPMMYoOpBAMHuoQSJ93BBOMmBAQSX14iMI2o33gcnKBJCVOA/viewform?usp=sf_link">Send A Feedback</a></button>
     <script type="text/javascript">
       // generate points features
 
